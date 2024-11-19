@@ -3,12 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JourneyService } from './journey.service';
 import { JourneyController } from './journey.controller';
 import { Journey } from './journey.entity';
-import { Location } from '../location/location.entity'; // If LocationRepository is used in JourneyService
+import { UserModule } from '../user/user.module'; // Import UserModule
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Journey, Location])], // Importing Journey and any other required entities
+  imports: [TypeOrmModule.forFeature([Journey]), UserModule], // Add UserModule here
   providers: [JourneyService],
   controllers: [JourneyController],
-  exports: [TypeOrmModule], // Exporting TypeOrmModule if the repository is needed in other modules
 })
 export class JourneyModule {}

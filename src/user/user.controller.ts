@@ -11,7 +11,7 @@ export class UserController {
     return this.userService.generateOTP(nid, phoneNumber);
   }
 
-@Post('generate-qr')
+@Post('set-journey')
     async generateQRCode(
       @Body('userId') userId: number,
       @Body('startStationId') startStationId: number,

@@ -13,4 +13,6 @@ export class User {
 
   @Column({ default: false })
   isVerified: boolean;
+  journeys: any;
+  name: any;
 }

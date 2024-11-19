@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import * as QRCode from 'qrcode';
 
 @Injectable()
 export class UserService {
@@ -17,15 +16,23 @@ export class UserService {
       return { otp, message: 'OTP generated successfully' };
     }
 
-    async generateQRCode(userId: number, startStationId: number, endStationId: number) {
-      // Define the data to encode in the QR code
-      const qrData = `UserID: ${userId}, StartStationID: ${startStationId}, EndStationID: ${endStationId}`;
-  
-      // Generate the QR code as a data URL
-      const qrCode = await QRCode.toDataURL(qrData);
-  
-      return { qrCode, message: 'QR code generated successfully' };
-    }
+      async generateQRCode(userId: number, startStationId: number, endStationId: number) {
+        // Generate a unique 6-8 digit alphanumeric string for the QR code
+        const qrData = this.generateRandomCode(6, 8);
+        // Optionally save this code in the database if you want to verify it later
+        return { qrCode: qrData, message: 'QR code generated successfully' };
+      }
+    
+      // Helper method to generate a random alphanumeric string
+      private generateRandomCode(minLength: number, maxLength: number): string {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+        let result = '';
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+      }    
     
   createUser(userData: Partial<User>) {
     const user = this.userRepository.create(userData);

@@ -1,30 +1,26 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from '../user/user.entity';
-import { Location } from '../location/location.entity';
 
 @Entity()
 export class Journey {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @Column()
   userId: number;
 
-  @ManyToOne(() => Location)
-  startStationId: number;
+  @Column({ length: 8 }) // Length adjusted for the 6-8 digit alphanumeric code
+  qrCode: string;
 
-  @ManyToOne(() => Location)
-  endStationId: number;
-
-  @Column()
+  @Column({ type: 'timestamp', nullable: true })
   startTime: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   endTime: Date;
 
-  @Column({ nullable: true })
-  totalMinutes: number;
+  @Column({ type: 'int', nullable: true })
+  totalMinutesTraveled: number;
 
-  @Column({ nullable: true })
-  totalAmountSpent: number;
+  @ManyToOne(() => User, (user) => user.journeys)
+  user: User;
 }
